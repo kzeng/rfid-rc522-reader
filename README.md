@@ -11,14 +11,13 @@ This project provides an SPI1 RC522 reader with a USB CDC command console. Scann
 | MISO | PA6 |
 | MOSI | PA7 |
 | RST | PB0 |
-| Buzzer module S / SIG | PB1 / TIM3_CH4 |
 | 3.3V | 3.3V |
 | GND | GND |
 | IRQ | Not connected |
 
-For the three-pin passive buzzer module, connect `S`/`SIG` to PB1, `-` to GND, and `+` to the voltage specified for the module. Its signal input must accept 3.3V logic. PB1 uses TIM3_CH4 to generate an approximately 2 kHz, 50% duty tone. A bare two-pin buzzer may need a transistor driver; do not assume it can be driven directly from a GPIO.
+For the three-pin passive buzzer module, connect `S` to PB1/TIM3_CH4, `-` to GND, and `+` to the voltage specified for the module. Its signal input must accept 3.3V logic. PB1 generates an approximately 2 kHz, 50% duty tone. A bare two-pin buzzer may need a transistor driver; do not assume it can be driven directly from a GPIO. Keep the RC522 at 3.3V; do not power it from 5V.
 
-Use a data-capable USB cable from the Blue Pill USB connector to the computer for the CDC console. The ST-Link is used for flashing/debugging and does not provide this serial console.
+The Blue Pill micro-USB port provides the USB CDC command console. Connect ST-Link to the board's labeled `SWDIO`, `SWCLK`, and `GND` pins for flashing/debugging; `NRST` is optional. These SWD connections are separate from the RC522 SPI wiring. See [the detailed wiring guide](docs/rfid-basics-and-usage.md#本项目硬件与连接).
 
 ## Build and flash
 
