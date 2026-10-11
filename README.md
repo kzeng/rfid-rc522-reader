@@ -47,6 +47,15 @@ Successful scan/read gives one short beep, write/copy gives two, erase gives two
 
 The firmware refuses block 0 (UID/manufacturer data) and sector trailers (keys/access bits). It does not write sector keys, copy UIDs, handle non-Classic card memory, or copy an entire card. Do not use these commands on cards containing data you need.
 
+To read all accessible data blocks from a host computer, install `pyserial` and run:
+
+```sh
+python -m pip install pyserial
+python tools/read_all_blocks.py /dev/ttyACM0 --output card-dump.txt
+```
+
+On Windows, pass the serial port name such as `COM4`. The script scans the card to identify Classic 1K/4K, then reads ordinary data blocks using the firmware console. It skips block 0 and every sector trailer; each block must authenticate with the factory default Key A. Keep dump files private if the card contains sensitive data.
+
 See [the development log](docs/development-log.md) for implementation steps and hardware/build notes.
 
 For a Chinese introduction to RFID/RC522 concepts, card compatibility, the command workflow, and firmware interfaces, see [RFID basics and usage](docs/rfid-basics-and-usage.md).
