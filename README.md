@@ -56,6 +56,14 @@ python tools/read_all_blocks.py /dev/ttyACM0 --output card-dump.txt
 
 On Windows, pass the serial port name such as `COM4`. The script scans the card to identify Classic 1K/4K, then reads ordinary data blocks using the firmware console. It skips block 0 and every sector trailer; each block must authenticate with the factory default Key A. Keep dump files private if the card contains sensitive data.
 
+To copy and verify all ordinary data blocks between two same-size test cards:
+
+```sh
+python tools/card_transfer_verify.py /dev/ttyACM0 --dump source-card.json
+```
+
+Follow the prompts to present the source, target, then target again for verification. The script requires the target's explicit `COPY` confirmation before writing. Both cards must be MIFARE Classic 1K or both 4K, and every copied sector must use the factory default Key A. This overwrites ordinary data blocks on the target; block 0 and sector trailers are skipped. Use only cards you own or are authorized to modify, and keep dump files private.
+
 See [the development log](docs/development-log.md) for implementation steps and hardware/build notes.
 
 For a Chinese introduction to RFID/RC522 concepts, card compatibility, the command workflow, and firmware interfaces, see [RFID basics and usage](docs/rfid-basics-and-usage.md).
