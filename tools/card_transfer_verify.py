@@ -51,17 +51,26 @@ def card_info(port, timeout):
 
 
 def data_blocks(max_blocks):
-    for block in range(1, max_blocks):
-        trailer = (block % 4 == 3) if block < 128 else ((block - 128) % 16 == 15)
-        if not trailer:
+    for block in range(max_blocks):
+        if block != 0 and not is_trailer(block):
             yield block
+
+
+def is_trailer(block):
+    if block < 128:
+        return block % 4 == 3
+    return (block - 128) % 16 == 15
 
 
 def read_card(port, max_blocks, timeout, label):
     values = {}
     blocks = list(data_blocks(max_blocks))
     print(f"Reading {label}: {len(blocks)} ordinary blocks")
-    for index, block in enumerate(blocks, 1):
+    skipped = "-- " * 15 + "--"
+    for block in range(max_blocks):
+        if block == 0 or is_trailer(block):
+            print(f"  block {block:03d}: {skipped}")
+            continue
         response = command(port, f"read {block}", timeout)
         match = DATA_LINE.search(response)
         if not match:
